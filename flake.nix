@@ -15,20 +15,20 @@
         dynamic-linker = stdenv.cc.bintools.dynamicLinker;
 
       libPath = lib.makeLibraryPath [
-        stdenv.cc.cc flutter libX11
+        stdenv.cc.cc flutter
       ];
 
       in stdenv.mkDerivation rec {
 
         name = "timecop";
         
-        nativeBuildInputs = [ autoPatchelfHook flutter ];
+        nativeBuildInputs = [ autoPatchelfHook flutter sqlite ];
 
-        buildInputs = [ flutter ];
+        buildInputs = [ flutter sqlite ];
         
         src = self;
         
-        buildPhase = "flutter build linux --release;";
+        buildPhase = "export HOME=$(pwd); flutter --disable-telemetry; flutter build linux --release;";
         installPhase = "mkdir -p $out/bin; mv -t $out/bin build/linux/x64/release/bundle/timecop";
       };
 
